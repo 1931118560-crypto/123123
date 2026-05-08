@@ -13,12 +13,10 @@ workflows:
     scripts:
       - name: Install JS dependencies
         script: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
-          pnpm install --frozen-lockfile
+          npx pnpm@latest install --no-frozen-lockfile
       - name: Build web assets and sync iOS
         script: |
-          pnpm run build
+          npx pnpm@latest run build
           npx cap sync ios
       - name: Set up code signing
         script: |
