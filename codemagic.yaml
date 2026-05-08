@@ -1,0 +1,40 @@
+workflows:
+  ios_app_store:
+    name: MindPlan iOS App Store
+    max_build_duration: 120
+    environment:
+      xcode: latest
+      vars:
+        BUNDLE_ID: "com.mindplan.app"
+        XCODE_WORKSPACE: "ios/App/App.xcodeproj"
+        XCODE_SCHEME: "App"
+      groups:
+        - app_store_credentials
+    scripts:
+      - name: Install JS dependencies
+        script: |
+          npm install -g pnpm
+          pnpm install --frozen-lockfile
+      - name: Build web assets and sync iOS
+        script: |
+          pnpm run build
+          npx cap sync ios
+      - name: Set up code signing
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+          keychain add-certificates
+          xcode-project use-profiles
+      - name: Build IPA
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false
+        submit_to_app_store: false
