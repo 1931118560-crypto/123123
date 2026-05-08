@@ -4,3 +4,11 @@ dist
 dist-admin
 .env
 .env.*
+ios_cert
+*.p12
+*.cer
+*.csr
+*.key
+*.mobileprovision
+supabase/.temp
+supabase/supabase/.temp
