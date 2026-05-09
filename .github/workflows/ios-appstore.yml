@@ -30,6 +30,7 @@ jobs:
       - name: Install dependencies and build web assets
         run: |
           npm i -g pnpm
+          pnpm approve-builds @tailwindcss/oxide esbuild
           pnpm install --no-frozen-lockfile
           pnpm run build
           npx cap sync ios
