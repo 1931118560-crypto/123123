@@ -13,10 +13,10 @@ workflows:
     scripts:
       - name: Install JS dependencies
         script: |
-          npx pnpm@latest install --no-frozen-lockfile
+          npm install
       - name: Build web assets and sync iOS
         script: |
-          npx pnpm@latest run build
+          npm run build
           npx cap sync ios
       - name: Set up code signing
         script: |
