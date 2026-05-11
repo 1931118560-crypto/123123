@@ -23,6 +23,9 @@ workflows:
           keychain initialize
           app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
           keychain add-certificates
+          # Set code signing style to manual
+          plutil -replace "CODE_SIGN_STYLE" -string "Manual" ios/App/App.xcodeproj/project.pbxproj || true
+          plutil -replace "DEVELOPMENT_TEAM" -string "9H86QFCQ8T" ios/App/App.xcodeproj/project.pbxproj || true
       - name: Build IPA
         script: |
           xcodebuild -project "$XCODE_WORKSPACE" \
